@@ -1,26 +1,26 @@
 'use strict';
-//const { response } = require('express');
+
+require('dotenv').config();
 const express = require('express');
-//pulls in the express object so we can use it's methods
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
-app.use(express.static('public'));
+app.use(express.static('./public'));
 
-//app.get('/user.data', (request, response) => {
-   // response.send('this worked!');
-//});
-
-app.get('/', (request, response) => {
-    response.send('index.html');
+app.get('/hello', (request, response) => {
+  response.status(200).send('Hello');
 });
 
-app.get('/user-data', (request, response) => {
-        response.json({ username: 'doraniccole', pw: '12345', location: 'slc'});
-    });
-
-//sets up my server to accept incoming traffic at a specific port
-app.listen (PORT, () => {
-    console.log(`listening on ${PORT}`);
+app.get('/data', (request, response) => {
+  let airplanes = {
+    departure: Date.now(),
+    canFly: true,
+    pilot: 'Well Trained',
+  };
+  response.status(200).json(airplanes);
 });
 
+app.use('*', (request, response) => response.send('Sorry, that route does not exist.'));
+
+app.listen(PORT,() => console.log(`Listening on port ${PORT}`));
